@@ -8,6 +8,7 @@ public class menuScript : MonoBehaviour {
 	void Start () {
 		Debug.Log("Hello World");
 		Debug.Log ("It Hard Really");
+		Debug.Log ("It's Alive");
 	}
 	
 	// Update is called once per frame
