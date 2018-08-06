@@ -7,11 +7,18 @@ public class playerMovement : MonoBehaviour {
 	public float speed;
 	float move;
 	bool facingRight = true;
+	public GameObject[] lasers;
 	Animator playerAnim;
+	public float laserDirection;
+	public Transform shotPosition;
+	public static playerMovement instance {get;set;}
 	// Use this for initialization
 	void Start () {
+		instance = this;
 		playerAnim = GetComponent<Animator>();
 		rb2d = GetComponent<Rigidbody2D>();
+		laserDirection = 1;
+		
 	}
 	void FixedUpdate()
 	{
@@ -26,9 +33,20 @@ public class playerMovement : MonoBehaviour {
 			Flip ();
 		else if (move < 0 && facingRight)
 			Flip ();
+
+		if (Input.GetKeyDown(KeyCode.Space)){
+			StartCoroutine(Shoot());
+		}
+	}
+
+	IEnumerator Shoot()
+	{	
+		Instantiate(lasers[0], shotPosition.position, shotPosition.rotation);
+		yield return null;
 	}
 
 	void Flip(){
+		laserDirection =-laserDirection;
 		facingRight = !facingRight;
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
