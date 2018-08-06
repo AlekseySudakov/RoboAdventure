@@ -41,7 +41,7 @@ public class playerMovement : MonoBehaviour {
 
 	IEnumerator Shoot()
 	{	
-		Instantiate(lasers[0], shotPosition.position, shotPosition.rotation);
+		Instantiate(lasers[0], shotPosition.position, Quaternion.identity);
 		yield return null;
 	}
 
