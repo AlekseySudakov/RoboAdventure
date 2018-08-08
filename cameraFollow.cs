@@ -8,6 +8,10 @@ public class cameraFollow : MonoBehaviour {
 	public float smoothTimeY;
 	public GameObject player;
 	public float posVar;
+	public bool bound;
+	public Vector3 minCameraPos;
+	public Vector3 maxCameraPos;
+
 
 
 	// Use this for initialization
@@ -25,5 +29,10 @@ public class cameraFollow : MonoBehaviour {
 		float posY = Mathf.SmoothDamp(transform.position.y, player.transform.position.y-posVar, ref velocity.y, smoothTimeY);
 
 		transform.position = new Vector3 (posX, posY, transform.position.z);
+		if(bound){
+			transform.position = new Vector3 (Mathf.Clamp(transform.position.x, minCameraPos.x, maxCameraPos.x),
+			Mathf.Clamp(transform.position.y, minCameraPos.y, maxCameraPos.y),
+			Mathf.Clamp(transform.position.z, minCameraPos.z, maxCameraPos.z));
+		}
 	}
 }
