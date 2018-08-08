@@ -25,10 +25,12 @@ public class cameraFollow : MonoBehaviour {
 	}
 	void FixedUpdate()
 	{
+		//камера следует за персонажем
 		float posX = Mathf.SmoothDamp(transform.position.x, player.transform.position.x, ref velocity.x, smoothTimeX);
 		float posY = Mathf.SmoothDamp(transform.position.y, player.transform.position.y-posVar, ref velocity.y, smoothTimeY);
 
 		transform.position = new Vector3 (posX, posY, transform.position.z);
+		//мин и максимальные значения координат положения камеры
 		if(bound){
 			transform.position = new Vector3 (Mathf.Clamp(transform.position.x, minCameraPos.x, maxCameraPos.x),
 			Mathf.Clamp(transform.position.y, minCameraPos.y, maxCameraPos.y),
