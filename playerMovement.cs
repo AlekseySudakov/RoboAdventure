@@ -11,9 +11,13 @@ public class playerMovement : MonoBehaviour {
 	Animator playerAnim;
 	public float laserDirection;
 	public Transform shotPosition;
+	public bool grounded;
+	public float jumpPower;
+	public float vertical;
 	public static playerMovement instance {get;set;}
 	// Use this for initialization
 	void Start () {
+		grounded = false;
 		instance = this;
 		playerAnim = GetComponent<Animator>();
 		rb2d = GetComponent<Rigidbody2D>();
@@ -23,12 +27,14 @@ public class playerMovement : MonoBehaviour {
 	void FixedUpdate()
 	{
 		move = Input.GetAxis("Horizontal");
+		vertical = Input.GetAxis("Vertical");
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		rb2d.velocity = new Vector2(move * speed, rb2d.velocity.y);
 		playerAnim.SetFloat("move", Mathf.Abs(move));
+		playerAnim.SetBool("grounded", grounded);
 		if (move > 0 && !facingRight)
 			Flip ();
 		else if (move < 0 && facingRight)
@@ -36,6 +42,10 @@ public class playerMovement : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.Space)){
 			StartCoroutine(Shoot());
+		}
+		if (grounded && Input.GetKeyDown(KeyCode.UpArrow)){
+			rb2d.AddForce(Vector2.up * jumpPower);
+
 		}
 	}
 
@@ -52,4 +62,5 @@ public class playerMovement : MonoBehaviour {
 		theScale.x *= -1;
 		transform.localScale = theScale;
 	}	
+
 }
