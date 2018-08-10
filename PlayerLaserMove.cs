@@ -17,6 +17,7 @@ public class PlayerLaserMove : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		rb2d.velocity = new Vector2(direction * speed, rb2d.velocity.y);
+		Destroy(3f);
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -25,12 +26,12 @@ public class PlayerLaserMove : MonoBehaviour {
 			this.GetComponent<SpriteRenderer>().color = new Color (255,255,255,0);
 			colisionParicle.Play();
 			speed = 0;
-			Destroy();
+			Destroy(2f);
 		}
 		
 	}
 
-	void Destroy(){
-		Destroy(gameObject, 2f);
+	void Destroy(float time){
+		Destroy(gameObject, time);
 	}
 }
