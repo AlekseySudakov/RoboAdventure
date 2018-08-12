@@ -34,6 +34,7 @@ public class playerMovement : MonoBehaviour {
 	void Update () {
 		rb2d.velocity = new Vector2(move * speed, rb2d.velocity.y);
 		playerAnim.SetFloat("move", Mathf.Abs(move));
+		playerAnim.SetFloat("vertical", Mathf.Abs(vertical));
 		playerAnim.SetBool("grounded", grounded);
 		if (move > 0 && !facingRight)
 			Flip ();
