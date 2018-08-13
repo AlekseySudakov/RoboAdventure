@@ -7,8 +7,13 @@ public class PlayerLaserMove : MonoBehaviour {
 	public float speed;
 	float direction;
 	public ParticleSystem colisionParicle;
+	public static PlayerLaserMove instance {get;set;}
+	public string color;
 	// Use this for initialization
 	void Start () {
+
+		instance = this;
+		color = playerMovement.instance.color;
 		direction = playerMovement.instance.laserDirection;
 		rb2d = GetComponent<Rigidbody2D>();
 		

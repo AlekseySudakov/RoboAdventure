@@ -14,9 +14,13 @@ public class playerMovement : MonoBehaviour {
 	public bool grounded;
 	public float jumpPower;
 	public float vertical;
+	public string color;
 	public static playerMovement instance {get;set;}
+	public GameObject ShootingAmmo;
 	// Use this for initialization
 	void Start () {
+		color = "red";
+		ShootingAmmo = lasers[0];
 		grounded = false;
 		instance = this;
 		playerAnim = GetComponent<Animator>();
@@ -28,13 +32,14 @@ public class playerMovement : MonoBehaviour {
 	{
 		move = Input.GetAxis("Horizontal");
 		vertical = Input.GetAxis("Vertical");
+		playerAnim.SetFloat("move", Mathf.Abs(move));
+		playerAnim.SetFloat("vertical", Mathf.Abs(vertical));
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		rb2d.velocity = new Vector2(move * speed, rb2d.velocity.y);
-		playerAnim.SetFloat("move", Mathf.Abs(move));
-		playerAnim.SetFloat("vertical", Mathf.Abs(vertical));
+		
 		playerAnim.SetBool("grounded", grounded);
 		if (move > 0 && !facingRight)
 			Flip ();
@@ -42,17 +47,30 @@ public class playerMovement : MonoBehaviour {
 			Flip ();
 
 		if (Input.GetKeyDown(KeyCode.Space)){
-			StartCoroutine(Shoot());
+			StartCoroutine(Shoot(ShootingAmmo));
+		}
+		if (Input.GetKeyDown(KeyCode.R)){
+			if (color == "red"){
+				color = "blue";
+				ShootingAmmo = lasers[1];
+			}
+			else if (color == "blue"){
+				color = "yellow";
+			}
+			else if (color == "yellow"){
+				color = "red";
+				ShootingAmmo =  lasers[0];
+			}
 		}
 		if (grounded && Input.GetKeyDown(KeyCode.UpArrow)){
 			rb2d.AddForce(Vector2.up * jumpPower);
-
+			playerAnim.SetFloat("vertical", 1);
 		}
 	}
 
-	IEnumerator Shoot()
+	IEnumerator Shoot(GameObject ammo)
 	{	
-		Instantiate(lasers[0], shotPosition.position, Quaternion.identity);
+		Instantiate(ammo, shotPosition.position, Quaternion.identity);
 		yield return null;
 	}
 
@@ -63,5 +81,7 @@ public class playerMovement : MonoBehaviour {
 		theScale.x *= -1;
 		transform.localScale = theScale;
 	}	
+
+
 
 }
