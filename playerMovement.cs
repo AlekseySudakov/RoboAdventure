@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class playerMovement : MonoBehaviour {
 	Rigidbody2D rb2d;
 	public float speed;
@@ -17,8 +17,15 @@ public class playerMovement : MonoBehaviour {
 	public string color;
 	public static playerMovement instance {get;set;}
 	public GameObject ShootingAmmo;
+	public Sprite [] laserColor;
+	public Image laserImg;
+	public Image healthImg;
+	public float healthValue;
+	public float tempHealth;
 	// Use this for initialization
 	void Start () {
+		healthValue = 100;
+		tempHealth = 100;
 		color = "red";
 		ShootingAmmo = lasers[0];
 		grounded = false;
@@ -38,8 +45,9 @@ public class playerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		StartCoroutine(DecreaseHealth());
 		rb2d.velocity = new Vector2(move * speed, rb2d.velocity.y);
-		
+		Collect(healthValue);
 		playerAnim.SetBool("grounded", grounded);
 		if (move > 0 && !facingRight)
 			Flip ();
@@ -51,21 +59,30 @@ public class playerMovement : MonoBehaviour {
 		}
 		if (Input.GetKeyDown(KeyCode.R)){
 			if (color == "red"){
-				color = "blue";
-				ShootingAmmo = lasers[1];
+				// color = "blue";
+				// ShootingAmmo = lasers[1];
+				ChangeColor("blue", laserColor[1], lasers[1]);
 			}
 			else if (color == "blue"){
-				color = "yellow";
+				//color = "yellow";
+				ChangeColor("yellow", laserColor[2], lasers[2]);
 			}
 			else if (color == "yellow"){
-				color = "red";
-				ShootingAmmo =  lasers[0];
+				// color = "red";
+				// ShootingAmmo =  lasers[0];
+				ChangeColor("red", laserColor[0], lasers[0]);
 			}
 		}
 		if (grounded && Input.GetKeyDown(KeyCode.UpArrow)){
 			rb2d.AddForce(Vector2.up * jumpPower);
 			playerAnim.SetFloat("vertical", 1);
 		}
+	}
+	void ChangeColor(string laser, Sprite laserColorImg, GameObject ammo){
+		color = laser;
+		laserImg.sprite = laserColorImg;
+		ShootingAmmo = ammo;
+
 	}
 
 	IEnumerator Shoot(GameObject ammo)
@@ -81,6 +98,26 @@ public class playerMovement : MonoBehaviour {
 		theScale.x *= -1;
 		transform.localScale = theScale;
 	}	
+
+	void OnTriggerEnter2D(Collider2D other){
+		if (other.tag == "redLaser"){
+			tempHealth = healthValue - 10;
+		}
+	}
+
+	IEnumerator DecreaseHealth()
+	{
+		if (healthValue > tempHealth){
+			healthValue -= (Time.deltaTime * 15);
+		}
+		yield return null;
+	}
+
+		public void Collect(float health){
+		float amounth = (health/100.0f);
+		if (healthImg != null)
+		healthImg.fillAmount = amounth;
+	}
 
 
 

@@ -40,6 +40,10 @@ public class enemyScript: ClassEnemy {
 		else{
 			StartCoroutine(EnemyHide());
 		}
+		if (health <= 0){
+			firstSceneController.getInstance.enemyDestroy = true;
+			Debug.Log(firstSceneController.getInstance.enemyDestroy.ToString());
+		}
 	}
 	void FixedUpdate()
 	{
@@ -83,6 +87,7 @@ public class enemyScript: ClassEnemy {
 	void Shot(){
 		Instantiate (laser, laserPossition.position, Quaternion.identity);
 	}
+
 
 	void Death()
 	{
