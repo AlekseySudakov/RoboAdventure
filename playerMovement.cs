@@ -32,8 +32,7 @@ public class playerMovement : MonoBehaviour {
 		instance = this;
 		playerAnim = GetComponent<Animator>();
 		rb2d = GetComponent<Rigidbody2D>();
-		laserDirection = 1;
-		
+		laserDirection = 1;	
 	}
 	void FixedUpdate()
 	{
@@ -59,17 +58,12 @@ public class playerMovement : MonoBehaviour {
 		}
 		if (Input.GetKeyDown(KeyCode.R)){
 			if (color == "red"){
-				// color = "blue";
-				// ShootingAmmo = lasers[1];
 				ChangeColor("blue", laserColor[1], lasers[1]);
 			}
 			else if (color == "blue"){
-				//color = "yellow";
 				ChangeColor("yellow", laserColor[2], lasers[2]);
 			}
 			else if (color == "yellow"){
-				// color = "red";
-				// ShootingAmmo =  lasers[0];
 				ChangeColor("red", laserColor[0], lasers[0]);
 			}
 		}
@@ -82,7 +76,6 @@ public class playerMovement : MonoBehaviour {
 		color = laser;
 		laserImg.sprite = laserColorImg;
 		ShootingAmmo = ammo;
-
 	}
 
 	IEnumerator Shoot(GameObject ammo)

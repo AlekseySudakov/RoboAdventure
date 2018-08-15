@@ -7,6 +7,8 @@ public class firstNpcScript : MonoBehaviour {
 	bool facingRight;
 	GameObject player;
 	Rigidbody2D rb2d;
+	public float speed;
+	float move = 1;
 	public GameObject words;
 	public Animator wordsAnim;
 	// Use this for initialization
@@ -25,7 +27,7 @@ public class firstNpcScript : MonoBehaviour {
 		if (firstSceneController.getInstance.enemyDestroy){
 			firstNpc.SetBool("isStand", true);
 		}
-		if (firstNpc.GetBool("isStand") == true) {
+		if (firstNpc.GetBool("isStand") == true && wordsAnim.GetBool("words") == false) {
 			StartCoroutine(Reverse());
 		}
 		
@@ -38,6 +40,19 @@ public class firstNpcScript : MonoBehaviour {
 		if (!facingRight){
 			words.GetComponent<SpriteRenderer>().flipX = true;
 		}
+	}
+
+	public void GoNextInvoke(){
+		if (facingRight){
+			words.GetComponent<SpriteRenderer>().flipX = false;
+		}
+		Invoke("GoNext", 1f);
+	}
+	public void GoNext(){
+		if (!facingRight){
+			Flip();
+		}
+		rb2d.velocity = new Vector2 (move * speed, rb2d.velocity.y);
 	}
 
 	IEnumerator Reverse(){
