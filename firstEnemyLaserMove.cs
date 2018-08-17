@@ -16,7 +16,8 @@ public class firstEnemyLaserMove : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		rb2b.velocity = new Vector2 (direction * speed, rb2b.velocity.y);
-		Destroy(3f);
+		Invoke("SetLaserDisable", 0.3f);
+		Destroy(1f);
 	}
 
 	void OnTriggerEnter2D(Collider2D other)
@@ -31,5 +32,10 @@ public class firstEnemyLaserMove : MonoBehaviour {
 
 	void Destroy(float time){
 		Destroy(gameObject, time);
+	}
+	void SetLaserDisable(){
+		speed = 0;
+		this.GetComponent<SpriteRenderer>().color = new Color (0,0,0,0);
+		//colisionParicle.Play();
 	}
 }

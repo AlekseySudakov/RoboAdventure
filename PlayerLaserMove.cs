@@ -7,6 +7,7 @@ public class PlayerLaserMove : MonoBehaviour {
 	public float speed;
 	float direction;
 	public ParticleSystem colisionParicle;
+	
 	public static PlayerLaserMove instance {get;set;}
 	public string color;
 	// Use this for initialization
@@ -22,7 +23,8 @@ public class PlayerLaserMove : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		rb2d.velocity = new Vector2(direction * speed, rb2d.velocity.y);
-		Destroy(3f);
+		Invoke("SetLaserDisable", 0.3f);
+		Destroy(1f);
 	}
 
 	void OnTriggerEnter2D(Collider2D coll)
@@ -35,7 +37,12 @@ public class PlayerLaserMove : MonoBehaviour {
 		}
 		
 	}
-
+	void SetLaserDisable(){
+		speed = 0;
+		this.GetComponent<SpriteRenderer>().color = new Color (0,0,0,0);
+		//colisionParicle.Play();
+	}
+	
 	void Destroy(float time){
 		Destroy(gameObject, time);
 	}

@@ -52,6 +52,7 @@ public class firstNpcScript : MonoBehaviour {
 		if (!facingRight){
 			Flip();
 		}
+		firstNpc.SetFloat("move", Mathf.Abs(move));
 		rb2d.velocity = new Vector2 (move * speed, rb2d.velocity.y);
 	}
 
@@ -60,9 +61,11 @@ public class firstNpcScript : MonoBehaviour {
 		if (player.transform.position.x < this.transform.position.x && facingRight){
 			Flip();
 		}
+		else if (player.transform.position.x > this.transform.position.x && !facingRight){
+			Flip();
+		}
 		yield return null;
 	}
-	
 	void Flip(){
 		facingRight = !facingRight;
 		Vector3 theScale = transform.localScale;

@@ -22,8 +22,14 @@ public class playerMovement : MonoBehaviour {
 	public Image healthImg;
 	public float healthValue;
 	public float tempHealth;
+	public float temperature = 0;
+	public bool overheat;
+	public Image heatIndicator;
+	public Color32 color32;
+	public ParticleSystem overheatParticles;
 	// Use this for initialization
 	void Start () {
+		overheat = false;
 		healthValue = 100;
 		tempHealth = 100;
 		color = "red";
@@ -44,16 +50,20 @@ public class playerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		
+		StartCoroutine(OverheatDown());
 		StartCoroutine(DecreaseHealth());
+		StartCoroutine(OverheatParticle());
 		rb2d.velocity = new Vector2(move * speed, rb2d.velocity.y);
 		Collect(healthValue);
+		Overheat(temperature);
 		playerAnim.SetBool("grounded", grounded);
 		if (move > 0 && !facingRight)
 			Flip ();
 		else if (move < 0 && facingRight)
 			Flip ();
 
-		if (Input.GetKeyDown(KeyCode.Space)){
+		if (Input.GetKeyDown(KeyCode.Space) && !overheat){
 			StartCoroutine(Shoot(ShootingAmmo));
 		}
 		if (Input.GetKeyDown(KeyCode.R)){
@@ -81,6 +91,42 @@ public class playerMovement : MonoBehaviour {
 	IEnumerator Shoot(GameObject ammo)
 	{	
 		Instantiate(ammo, shotPosition.position, Quaternion.identity);
+		if (temperature != 100){
+			
+			if (temperature >= 100){
+				temperature = 100;
+				overheat = true;
+			}	
+			else {
+				temperature += 10;
+			}
+		}
+		yield return null;
+	}
+	IEnumerator OverheatParticle()
+	{
+		if (overheat){
+			Debug.Log("Overheat");
+			overheatParticles.Play();
+		}
+		else{
+			overheatParticles.Stop();
+		}
+		yield return null;
+	}
+	IEnumerator OverheatDown()
+	{
+		if (temperature > 0){
+			temperature -= Time.deltaTime * 20;
+		}
+		if (temperature <= 0){
+			temperature = 0;
+			overheat = false;
+		}
+		if (temperature >= 100){
+				temperature = 100;
+				overheat = true;
+		}	
 		yield return null;
 	}
 
@@ -95,6 +141,7 @@ public class playerMovement : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other){
 		if (other.tag == "redLaser"){
 			tempHealth = healthValue - 10;
+			Debug.Log("playerHit");
 		}
 	}
 
@@ -110,6 +157,11 @@ public class playerMovement : MonoBehaviour {
 		float amounth = (health/100.0f);
 		if (healthImg != null)
 		healthImg.fillAmount = amounth;
+	}
+	public void Overheat(float temper){
+		byte amounth = (byte)(temper * 2.55f);
+		color32 = new Color32 (255,255,255,amounth);
+		heatIndicator.color = color32;
 	}
 
 
