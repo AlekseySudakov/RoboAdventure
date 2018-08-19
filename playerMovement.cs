@@ -26,6 +26,7 @@ public class playerMovement : MonoBehaviour {
 	public bool overheat;
 	public Image heatIndicator;
 	public Color32 color32;
+	public float vSpeed;
 	public ParticleSystem overheatParticles;
 	// Use this for initialization
 	void Start () {
@@ -43,9 +44,11 @@ public class playerMovement : MonoBehaviour {
 	void FixedUpdate()
 	{
 		move = Input.GetAxis("Horizontal");
+		vSpeed = Vector2.Dot(rb2d.velocity, Vector2.up);
 		vertical = Input.GetAxis("Vertical");
 		playerAnim.SetFloat("move", Mathf.Abs(move));
-		playerAnim.SetFloat("vertical", Mathf.Abs(vertical));
+		playerAnim.SetFloat("vertical", vSpeed);
+		playerAnim.SetBool("grounded", grounded);
 	}
 	
 	// Update is called once per frame
@@ -57,7 +60,6 @@ public class playerMovement : MonoBehaviour {
 		rb2d.velocity = new Vector2(move * speed, rb2d.velocity.y);
 		Collect(healthValue);
 		Overheat(temperature);
-		playerAnim.SetBool("grounded", grounded);
 		if (move > 0 && !facingRight)
 			Flip ();
 		else if (move < 0 && facingRight)
@@ -77,9 +79,8 @@ public class playerMovement : MonoBehaviour {
 				ChangeColor("red", laserColor[0], lasers[0]);
 			}
 		}
-		if (grounded && Input.GetKeyDown(KeyCode.UpArrow)){
-			rb2d.AddForce(Vector2.up * jumpPower);
-			playerAnim.SetFloat("vertical", 1);
+		if (grounded && Input.GetButtonDown("Jump")){
+			StartCoroutine(Jump());
 		}
 	}
 	void ChangeColor(string laser, Sprite laserColorImg, GameObject ammo){
@@ -87,7 +88,11 @@ public class playerMovement : MonoBehaviour {
 		laserImg.sprite = laserColorImg;
 		ShootingAmmo = ammo;
 	}
-
+	IEnumerator Jump()
+	{
+		rb2d.AddForce(Vector2.up * jumpPower);
+		yield return null;
+	}
 	IEnumerator Shoot(GameObject ammo)
 	{	
 		Instantiate(ammo, shotPosition.position, Quaternion.identity);
