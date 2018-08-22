@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class shadowScript : MonoBehaviour {
 	public GameObject player;
 	public Scene scene;
+	public float yValueMinus;
 	public float yValue;
 	// Use this for initialization
 	void Start () {
@@ -22,7 +23,14 @@ public class shadowScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-			transform.position = new Vector2(player.transform.position.x, yValue);//-4.506f);
+			if (playerMovement.instance.grounded)
+				transform.position = new Vector2(player.transform.position.x, player.transform.position.y-yValueMinus);//-4.506f);
+			else if (playerMovement.instance.OnLift){
+				transform.position = new Vector2(player.transform.position.x, player.transform.position.y-yValueMinus);//-4.506f);
+			}
+			else {
+				transform.position = new Vector2(player.transform.position.x, yValue);//-4.506f);
+			}
 		
 	}
 }

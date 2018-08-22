@@ -27,9 +27,11 @@ public class playerMovement : MonoBehaviour {
 	public Image heatIndicator;
 	public Color32 color32;
 	public float vSpeed;
+	public bool OnLift;
 	public ParticleSystem overheatParticles;
 	// Use this for initialization
 	void Start () {
+		OnLift = false;
 		overheat = false;
 		healthValue = 100;
 		tempHealth = 100;

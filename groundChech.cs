@@ -15,7 +15,6 @@ void OnTriggerEnter2D(Collider2D other)
 	{
 		if (other.tag == "platform"){
 			player.grounded = true;
-
 		}
 	}
 	void OnTriggerStay2D(Collider2D other)
@@ -23,12 +22,18 @@ void OnTriggerEnter2D(Collider2D other)
 		if (other.tag == "platform"){
 			player.grounded = true;
 		}
+		else if (other.tag == "Lift"){
+			player.OnLift = true;
+		}
 	}
 	void OnTriggerExit2D(Collider2D other)
 	{
 		if (other.tag == "platform"){
 			player.grounded = false;
 		
+		}
+		else if (other.tag == "Lift"){
+			player.OnLift = false;
 		}
 	}
 }
