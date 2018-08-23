@@ -17,6 +17,7 @@ public class shadowScript : MonoBehaviour {
 		}
 		else if (scene.name == "city"){
 			yValue = -3.87f;
+			//yValueMinus = 1.17f;
 		}
 		player = GameObject.Find("player");
 	}
