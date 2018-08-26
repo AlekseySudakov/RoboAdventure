@@ -29,7 +29,7 @@ public class PlayerLaserMove : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		if (coll.tag == "barell"){
+		if (coll.tag == "barell" || coll.tag == "Wall"){
 			this.GetComponent<SpriteRenderer>().color = new Color (255,255,255,0);
 			colisionParicle.Play();
 			speed = 0;
@@ -37,6 +37,7 @@ public class PlayerLaserMove : MonoBehaviour {
 		}
 		
 	}
+	
 	void SetLaserDisable(){
 		speed = 0;
 		this.GetComponent<SpriteRenderer>().color = new Color (0,0,0,0);
